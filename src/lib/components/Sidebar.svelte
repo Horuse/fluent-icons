@@ -284,9 +284,7 @@
 		height: 80%;
 		fill: currentColor;
 	}
-	.icon-preview :global(svg *) {
-		fill: currentColor;
-	}
+
 	.close-icon :global(svg) {
 		width: 16px;
 		height: 16px;

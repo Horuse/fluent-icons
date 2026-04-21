@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import type MiniSearch from 'minisearch';
 	import panelRightSvg from '@fluentui/svg-icons/icons/panel_right_24_regular.svg?raw';
+	import dismissSvg from '@fluentui/svg-icons/icons/dismiss_24_regular.svg?raw';
 	import type { IconEntry, IconStyle, IconsJson } from '$lib/types';
 	import { buildIndex, SEARCH_OPTIONS } from '$lib/search';
 	import FilterBar from '$lib/components/FilterBar.svelte';
@@ -204,13 +205,29 @@
 	<div
 		class="flex items-center gap-3 border-b border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:shadow-none"
 	>
-		<input
-			bind:this={inputEl}
-			bind:value={query}
-			placeholder={data ? `Search ${data.count.toLocaleString()} icons…` : 'Loading…'}
-			type="search"
-			class="h-10 flex-1 rounded-lg border border-slate-300 bg-slate-50 px-4 text-sm outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 dark:focus:bg-slate-900"
-		/>
+		<div class="relative flex-1">
+			<input
+				bind:this={inputEl}
+				bind:value={query}
+				placeholder={data ? `Search ${data.count.toLocaleString()} icons…` : 'Loading…'}
+				type="text"
+				class="h-10 w-full rounded-lg border border-slate-300 bg-slate-50 pl-4 pr-11 text-sm outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 dark:focus:bg-slate-900"
+			/>
+			{#if query}
+				<button
+					type="button"
+					onclick={() => {
+						query = '';
+						inputEl?.focus();
+					}}
+					title="Clear search"
+					aria-label="Clear search"
+					class="absolute right-1.5 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-100 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:fill-current"
+				>
+					{@html dismissSvg}
+				</button>
+			{/if}
+		</div>
 		<span class="w-28 text-right text-xs tabular-nums text-slate-500 dark:text-slate-400">
 			{#if data}
 				{filtered.length.toLocaleString()} / {data.count.toLocaleString()}

@@ -58,7 +58,4 @@
 		height: 100%;
 		fill: currentColor;
 	}
-	.icon-inline :global(svg *) {
-		fill: currentColor;
-	}
 </style>
