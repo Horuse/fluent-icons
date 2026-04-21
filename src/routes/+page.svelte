@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type MiniSearch from 'minisearch';
+	import panelRightSvg from '@fluentui/svg-icons/icons/panel_right_24_regular.svg?raw';
 	import type { IconEntry, IconStyle, IconsJson } from '$lib/types';
 	import { buildIndex, SEARCH_OPTIONS } from '$lib/search';
 	import FilterBar from '$lib/components/FilterBar.svelte';
@@ -18,6 +19,7 @@
 
 	let inputEl: HTMLInputElement | undefined = $state();
 	let selected: IconEntry | null = $state(null);
+	let sidebarOpen: boolean = $state(false);
 
 	onMount(async () => {
 		const res = await fetch('/icons.json');
@@ -55,7 +57,7 @@
 
 <div class="flex h-screen flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
 	<header
-		class="flex items-center gap-3 border-b border-slate-200 bg-white px-4 py-2 dark:border-slate-800 dark:bg-slate-900"
+		class="flex items-start sm:items-center flex-col sm:flex-row gap-3 border-b border-slate-200 bg-white px-4 py-2 dark:border-slate-800 dark:bg-slate-900"
 	>
 		<div class="flex flex-col leading-tight">
 			<h1 class="text-sm font-semibold tracking-tight">fluent-icons</h1>
@@ -71,7 +73,18 @@
 				· MIT License
 			</span>
 		</div>
-		<div class="ml-auto flex items-center gap-2">
+		<div class="sm:ml-auto flex items-center gap-2">
+		{#if selected}
+			<button
+				type="button"
+				onclick={() => (sidebarOpen = !sidebarOpen)}
+				title={sidebarOpen ? 'Hide details' : 'Show details'}
+				aria-label="Toggle details panel"
+				class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 sm:hidden dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:bg-slate-800 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:fill-current"
+			>
+				{@html panelRightSvg}
+			</button>
+		{/if}
 		<ThemeToggle />
 		<a
 			href="https://github.com/Horuse/fluenticons"
@@ -120,16 +133,19 @@
 					preferredStyle={displayStyle}
 					{columns}
 					selectedSlug={selected?.slug ?? null}
-					onSelect={(ic) => (selected = ic)}
+					onSelect={(ic) => {
+						selected = ic;
+						sidebarOpen = true;
+					}}
 				/>
 			</div>
-			{#if selected}
+			{#if selected && sidebarOpen}
 				<Sidebar
 					icon={selected}
 					cdn={data.cdn}
 					preferredSize={displaySize}
 					preferredStyle={displayStyle}
-					onClose={() => (selected = null)}
+					onClose={() => (sidebarOpen = false)}
 				/>
 			{/if}
 		</div>

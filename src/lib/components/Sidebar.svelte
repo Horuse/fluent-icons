@@ -113,7 +113,7 @@
 </script>
 
 <aside
-	class="flex h-full w-80 shrink-0 flex-col border-l border-slate-200 bg-white text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+	class="fixed inset-y-0 right-0 z-40 flex h-full w-full flex-col border-l border-slate-200 bg-white text-slate-900 shadow-xl sm:static sm:inset-auto sm:w-80 sm:shrink-0 sm:shadow-none dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
 	transition:slide|global={{ axis: 'x', duration: 220, easing: cubicOut }}
 >
 	<header
