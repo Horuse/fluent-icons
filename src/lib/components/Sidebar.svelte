@@ -54,16 +54,20 @@
 	});
 
 	const pascal = $derived(pascalCase(icon.slug));
-	const reactImportName = $derived(
-		`${pascal}${effSize}${effStyle === 'filled' ? 'Filled' : 'Regular'}`
-	);
-	const reactImport = $derived(
-		`import { ${reactImportName} } from '@fluentui/react-icons';`
-	);
+	const camel = $derived(pascal.charAt(0).toLowerCase() + pascal.slice(1));
+	const styleCap = $derived(effStyle === 'filled' ? 'Filled' : 'Regular');
+	const identifier = $derived(`${pascal}${effSize}${styleCap}`);
+
 	const svgImport = $derived(
 		file ? `import svg from '@fluentui/svg-icons/icons/${file}?raw';` : ''
 	);
-	const svgPath = $derived(file ? `node_modules/@fluentui/svg-icons/icons/${file}` : '');
+	const reactImport = $derived(`import { ${identifier} } from '@fluentui/react-icons';`);
+	const reactNativeImport = $derived(
+		`import { ${identifier} } from '@fluentui/react-native-icons';`
+	);
+	const androidDrawable = $derived(`R.drawable.ic_fluent_${icon.slug}_${effSize}_${effStyle}`);
+	const iosEnum = $derived(`UIImage(fluent: .${camel}${effSize}${styleCap})`);
+	const flutterIcon = $derived(`Icon(FluentIcons.${icon.slug}_${effSize}_${effStyle})`);
 
 	function pascalCase(slug: string): string {
 		return slug
@@ -223,57 +227,36 @@
 				</div>
 			</div>
 
-			{#if svgPath}
+			{#snippet codeRow(label: string, value: string, key: string)}
 				<div>
-					<div class="mb-1 text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400">path</div>
-					<div class="flex items-center gap-1">
+					<div
+						class="mb-1 text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400"
+					>
+						{label}
+					</div>
+					<div class="flex items-start gap-1">
 						<code
-							class="min-w-0 flex-1 overflow-x-auto rounded bg-slate-100 px-2 py-1 font-mono text-[11px] text-slate-800 dark:bg-slate-800 dark:text-slate-200"
-							>{svgPath}</code
+							class="min-w-0 flex-1 overflow-x-auto whitespace-pre rounded bg-slate-100 px-2 py-1 font-mono text-[11px] text-slate-800 dark:bg-slate-800 dark:text-slate-200"
+							>{value}</code
 						>
 						<button
-							onclick={() => copy(svgPath, 'path')}
+							onclick={() => copy(value, key)}
 							class="shrink-0 rounded bg-slate-900 px-2 py-1 text-[11px] text-white hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300"
 						>
-							{copiedKey === 'path' ? 'copied' : 'copy'}
+							{copiedKey === key ? 'copied' : 'copy'}
 						</button>
 					</div>
 				</div>
+			{/snippet}
+
+			{#if svgImport}
+				{@render codeRow('svg import', svgImport, 'svgImport')}
 			{/if}
-
-			<div>
-				<div class="mb-1 text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400">svg import</div>
-				<div class="flex items-start gap-1">
-					<code
-						class="min-w-0 flex-1 overflow-x-auto whitespace-pre rounded bg-slate-100 px-2 py-1 font-mono text-[11px] text-slate-800 dark:bg-slate-800 dark:text-slate-200"
-						>{svgImport}</code
-					>
-					{#if svgImport}
-						<button
-							onclick={() => copy(svgImport, 'svgImport')}
-							class="shrink-0 rounded bg-slate-900 px-2 py-1 text-[11px] text-white hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300"
-						>
-							{copiedKey === 'svgImport' ? 'copied' : 'copy'}
-						</button>
-					{/if}
-				</div>
-			</div>
-
-			<div>
-				<div class="mb-1 text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400">react icons</div>
-				<div class="flex items-start gap-1">
-					<code
-						class="min-w-0 flex-1 overflow-x-auto whitespace-pre rounded bg-slate-100 px-2 py-1 font-mono text-[11px] text-slate-800 dark:bg-slate-800 dark:text-slate-200"
-						>{reactImport}</code
-					>
-					<button
-						onclick={() => copy(reactImport, 'react')}
-						class="shrink-0 rounded bg-slate-900 px-2 py-1 text-[11px] text-white hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300"
-					>
-						{copiedKey === 'react' ? 'copied' : 'copy'}
-					</button>
-				</div>
-			</div>
+			{@render codeRow('@fluentui/react-icons', reactImport, 'react')}
+			{@render codeRow('@fluentui/react-native-icons', reactNativeImport, 'rn')}
+			{@render codeRow('android', androidDrawable, 'android')}
+			{@render codeRow('ios', iosEnum, 'ios')}
+			{@render codeRow('flutter', flutterIcon, 'flutter')}
 		</div>
 	</div>
 
@@ -299,6 +282,9 @@
 	.icon-preview :global(svg) {
 		width: 80%;
 		height: 80%;
+		fill: currentColor;
+	}
+	.icon-preview :global(svg *) {
 		fill: currentColor;
 	}
 	.close-icon :global(svg) {

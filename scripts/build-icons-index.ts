@@ -22,6 +22,25 @@ type Variant = { size: number; style: IconStyle; file: string };
 const SVG_NAME_RE = /^(.+)_(\d+)_(regular|filled)\.svg$/;
 const META_PATH_RE = /\/assets\/([^/]+)\/metadata\.json$/;
 
+const MOJIBAKE_DECODER = new TextDecoder('utf-8', { fatal: true });
+
+// Fix strings that are valid UTF-8 bytes that were decoded as Latin-1 elsewhere
+// and then re-encoded — common in the upstream metadata (e.g. "â ï¸" for "⚠️").
+function fixMojibake(s: string): string {
+	if (!/[-ÿ]/.test(s)) return s;
+	const bytes = new Uint8Array(s.length);
+	for (let i = 0; i < s.length; i++) {
+		const c = s.charCodeAt(i);
+		if (c > 0xff) return s;
+		bytes[i] = c;
+	}
+	try {
+		return MOJIBAKE_DECODER.decode(bytes);
+	} catch {
+		return s;
+	}
+}
+
 const folderToSlug = (folder: string): string =>
 	folder
 		.toLowerCase()
@@ -116,14 +135,15 @@ for (const { folder, data } of metaEntries) {
 	const baseSlug = folderToSlug(folder);
 	const direct = svgBySlug.get(baseSlug);
 
-	const keywords = Array.isArray(data.keyword)
+	const rawKeywords = Array.isArray(data.keyword)
 		? data.keyword
 		: data.keyword
 			? [data.keyword]
 			: [];
-	const metaphors = Array.isArray(data.metaphor) ? data.metaphor : [];
-	const description = data.description ?? '';
-	const displayName = data.name ?? folder;
+	const keywords = rawKeywords.map(fixMojibake);
+	const metaphors = (Array.isArray(data.metaphor) ? data.metaphor : []).map(fixMojibake);
+	const description = fixMojibake(data.description ?? '');
+	const displayName = fixMojibake(data.name ?? folder);
 
 	if (direct) {
 		matched.add(baseSlug);
