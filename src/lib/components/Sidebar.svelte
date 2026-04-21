@@ -69,6 +69,9 @@
 	const iosEnum = $derived(`UIImage(fluent: .${camel}${effSize}${styleCap})`);
 	const flutterIcon = $derived(`Icon(FluentIcons.${icon.slug}_${effSize}_${effStyle})`);
 
+	const uniqKeywords: string[] = $derived([...new Set(icon.keywords)]);
+	const uniqMetaphors: string[] = $derived([...new Set(icon.metaphors)]);
+
 	function pascalCase(slug: string): string {
 		return slug
 			.split('_')
@@ -178,22 +181,22 @@
 				</div>
 			{/if}
 
-			{#if icon.keywords.length > 0}
+			{#if uniqKeywords.length > 0}
 				<div>
 					<div class="mb-1 text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400">keywords</div>
 					<div class="flex flex-wrap gap-1">
-						{#each icon.keywords as k (k)}
+						{#each uniqKeywords as k (k)}
 							<span class="rounded bg-slate-100 px-1.5 py-0.5 text-[11px] text-slate-700 dark:bg-slate-800 dark:text-slate-300">{k}</span>
 						{/each}
 					</div>
 				</div>
 			{/if}
 
-			{#if icon.metaphors.length > 0}
+			{#if uniqMetaphors.length > 0}
 				<div>
 					<div class="mb-1 text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400">metaphors</div>
 					<div class="flex flex-wrap gap-1">
-						{#each icon.metaphors as m (m)}
+						{#each uniqMetaphors as m (m)}
 							<span class="rounded bg-slate-100 px-1.5 py-0.5 text-[11px] text-slate-700 dark:bg-slate-800 dark:text-slate-300">{m}</span>
 						{/each}
 					</div>

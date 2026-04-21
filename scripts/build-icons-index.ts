@@ -140,8 +140,8 @@ for (const { folder, data } of metaEntries) {
 		: data.keyword
 			? [data.keyword]
 			: [];
-	const keywords = rawKeywords.map(fixMojibake);
-	const metaphors = (Array.isArray(data.metaphor) ? data.metaphor : []).map(fixMojibake);
+	const keywords = [...new Set(rawKeywords.map(fixMojibake))];
+	const metaphors = [...new Set((Array.isArray(data.metaphor) ? data.metaphor : []).map(fixMojibake))];
 	const description = fixMojibake(data.description ?? '');
 	const displayName = fixMojibake(data.name ?? folder);
 
