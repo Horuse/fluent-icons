@@ -6,6 +6,7 @@
 	import FilterBar from '$lib/components/FilterBar.svelte';
 	import IconGrid from '$lib/components/IconGrid.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
+	import ThemeToggle from '$lib/components/ThemeToggle.svelte';
 
 	let data: IconsJson | null = $state(null);
 	let index: MiniSearch<{ id: number }> | null = $state(null);
@@ -52,30 +53,32 @@
 	/>
 </svelte:head>
 
-<div class="flex h-screen flex-col bg-slate-50 text-slate-900">
+<div class="flex h-screen flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
 	<header
-		class="flex items-center gap-3 border-b border-slate-200 bg-white px-4 py-2"
+		class="flex items-center gap-3 border-b border-slate-200 bg-white px-4 py-2 dark:border-slate-800 dark:bg-slate-900"
 	>
 		<div class="flex flex-col leading-tight">
 			<h1 class="text-sm font-semibold tracking-tight">fluent-icons</h1>
-			<span class="text-[11px] text-slate-500">
+			<span class="text-[11px] text-slate-500 dark:text-slate-400">
 				unofficial viewer for
 				<a
 					href="https://github.com/microsoft/fluentui-system-icons"
 					target="_blank"
 					rel="noreferrer"
-					class="underline decoration-slate-300 hover:text-slate-700 hover:decoration-slate-500"
+					class="underline decoration-slate-300 hover:text-slate-700 hover:decoration-slate-500 dark:decoration-slate-600 dark:hover:text-slate-200 dark:hover:decoration-slate-400"
 					>Microsoft Fluent UI System Icons</a
 				>
 				· MIT License
 			</span>
 		</div>
+		<div class="ml-auto flex items-center gap-2">
+		<ThemeToggle />
 		<a
 			href="https://github.com/Horuse/fluenticons"
 			target="_blank"
 			rel="noreferrer"
 			title="Star on GitHub"
-			class="ml-auto flex h-8 items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 text-xs font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+			class="flex h-8 items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 text-xs font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:bg-slate-800"
 		>
 			<svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true">
 				<path
@@ -84,19 +87,20 @@
 			</svg>
 			<span>Star on GitHub</span>
 		</a>
+		</div>
 	</header>
 
 	<div
-		class="flex items-center gap-3 border-b border-slate-200 bg-white px-4 py-3 shadow-sm"
+		class="flex items-center gap-3 border-b border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:shadow-none"
 	>
 		<input
 			bind:this={inputEl}
 			bind:value={query}
 			placeholder={data ? `Search ${data.count.toLocaleString()} icons…` : 'Loading…'}
 			type="search"
-			class="h-10 flex-1 rounded-lg border border-slate-300 bg-slate-50 px-4 text-sm outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20"
+			class="h-10 flex-1 rounded-lg border border-slate-300 bg-slate-50 px-4 text-sm outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 dark:focus:bg-slate-900"
 		/>
-		<span class="w-28 text-right text-xs tabular-nums text-slate-500">
+		<span class="w-28 text-right text-xs tabular-nums text-slate-500 dark:text-slate-400">
 			{#if data}
 				{filtered.length.toLocaleString()} / {data.count.toLocaleString()}
 			{:else}
@@ -108,7 +112,7 @@
 	{#if data && index}
 		<FilterBar bind:styleFilter bind:sizeFilter bind:columns />
 		<div class="flex min-h-0 flex-1">
-			<div class="min-w-0 flex-1 pt-2">
+			<div class="min-w-0 flex-1 pt-4">
 				<IconGrid
 					icons={filtered}
 					cdn={data.cdn}
@@ -130,6 +134,8 @@
 			{/if}
 		</div>
 	{:else}
-		<div class="flex flex-1 items-center justify-center text-sm text-slate-400">Loading…</div>
+		<div class="flex flex-1 items-center justify-center text-sm text-slate-400 dark:text-slate-500">
+			Loading…
+		</div>
 	{/if}
 </div>

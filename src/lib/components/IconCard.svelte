@@ -38,25 +38,18 @@
 	type="button"
 	onclick={() => onSelect(icon)}
 	title={`${icon.name}\n${icon.slug}`}
-	class="icon-host group relative flex aspect-square w-full flex-col items-center justify-center gap-2 rounded-lg border p-2 text-slate-900 transition {selected
-		? 'border-blue-500 bg-blue-50'
-		: 'border-slate-200 bg-white hover:border-slate-400 hover:bg-slate-50'}"
+	class="icon-host flex aspect-square w-full flex-col items-center justify-center gap-2 rounded-lg border p-2 text-slate-900 transition dark:text-slate-100 {selected
+		? 'border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-500/10'
+		: 'border-slate-200 bg-white hover:border-slate-400 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-600 dark:hover:bg-slate-800'}"
 >
 	<div class="icon-inline flex h-[40%] w-[40%] items-center justify-center">
 		{#if svgText}
 			{@html svgText}
 		{/if}
 	</div>
-	<div class="w-full truncate text-center text-[11px] text-slate-500">{icon.name}</div>
-
-	{#if !icon.hasMetadata}
-		<span
-			class="absolute left-1 top-1 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] text-amber-800 opacity-0 transition group-hover:opacity-100"
-			title="No metadata in GitHub repo"
-		>
-			no meta
-		</span>
-	{/if}
+	<div class="w-full truncate text-center text-[11px] text-slate-500 dark:text-slate-400">
+		{icon.name}
+	</div>
 </button>
 
 <style>

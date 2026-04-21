@@ -33,7 +33,7 @@
 </script>
 
 {#if icons.length === 0}
-	<div class="flex h-full items-center justify-center text-sm text-slate-400">
+	<div class="flex h-full items-center justify-center text-sm text-slate-400 dark:text-slate-500">
 		No icons match.
 	</div>
 {:else}
