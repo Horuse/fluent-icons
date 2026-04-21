@@ -11,15 +11,17 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"icons:build": "bun run scripts/build-icons-index.ts"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.0.4",
 		"@eslint/js": "^10.0.1",
-		"@sveltejs/adapter-auto": "^7.0.1",
+		"@sveltejs/adapter-vercel": "^6.3.3",
 		"@sveltejs/kit": "^2.57.0",
 		"@sveltejs/vite-plugin-svelte": "^7.0.0",
 		"@tailwindcss/vite": "^4.2.2",
+		"@types/bun": "^1.3.12",
 		"@types/node": "^22",
 		"eslint": "^10.2.0",
 		"eslint-config-prettier": "^10.1.8",
@@ -31,12 +33,13 @@
 		"svelte": "^5.55.2",
 		"svelte-check": "^4.4.6",
 		"tailwindcss": "^4.2.2",
-		"tar": "^7.5.13",
 		"typescript": "^6.0.2",
 		"typescript-eslint": "^8.58.1",
 		"vite": "^8.0.7"
 	},
 	"dependencies": {
-		"@fluentui/svg-icons": "^1.1.324"
+		"@fluentui/svg-icons": "^1.1.324",
+		"minisearch": "^7.2.0",
+		"virtua": "^0.49.1"
 	}
 }
